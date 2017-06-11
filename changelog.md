@@ -1,4 +1,10 @@
 HEAD
+- Compatibility: Updated permessage-deflate support to reflect that the zlib
+  library does not actually support a sliding window size of 256 bits. 
+  WebSocket++ will no longer negotiate 256 bit deflate windows. If the user
+  of the library tries to request a 256 bit window a 512 bit window will be
+  specified instead (This was the previous behavior). #596 #653 Thank you 
+  Vinnie Falco and Gianfranco Costamagna for reporting.
 
 0.7.0 - 2016-02-22
 - MINOR BREAKING SOCKET POLICY CHANGE: Asio transport socket policy method 
