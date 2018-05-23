@@ -355,6 +355,8 @@ protected:
     template <typename ErrorCodeType>
     lib::error_code translate_ec(ErrorCodeType ec) {
         if (ec.category() == lib::asio::error::get_ssl_category()) {
+
+#if OPENSSL_VERSION_NUMBER <= 0x010090
             if (ERR_GET_REASON(ec.value()) == SSL_R_SHORT_READ) {
                 return make_error_code(transport::error::tls_short_read);
             } else {
@@ -362,6 +364,12 @@ protected:
                 // more. Pass through as TLS generic.
                 return make_error_code(transport::error::tls_error);
             }
+#else
+            // We know it is a TLS related error, but otherwise don't know
+            // more. Pass through as TLS generic.
+            return make_error_code(transport::error::tls_error);
+#endif
+
         } else {
             // We don't know any more information about this error so pass
             // through
