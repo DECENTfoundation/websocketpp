@@ -1,21 +1,55 @@
+dist: xenial
+
+sudo: false
+
 language: cpp
-compiler:
-  - gcc
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      cache:
+        directories:
+          - $HOME/boost
+
+    - os: osx
+      osx_image: xcode9.4
+      compiler: clang
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+
+before_cache:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew cleanup;
+    fi
+
 before_install:
- #- sudo apt-get install libboost-chrono1.48-dev libboost-regex1.48-dev libboost-system1.48-dev libboost-thread1.48-dev libboost-test1.48-dev libboost-random1.48-dev -y
- - sudo add-apt-repository -y ppa:boost-latest/ppa && sudo apt-get update -q && sudo apt-get install -y libboost-chrono1.55-dev libboost-random1.55-dev libboost-regex1.55-dev libboost-system1.55-dev libboost-thread1.55-dev libboost-test1.55-dev
-env:
-  global:
-    - BOOST_INCLUDES=/usr/include
-    - BOOST_LIBS=/usr/lib/x86_64-linux-gnu
-script: scons -j 2 && scons test
-branches:
-  only:
-    - master
-    - develop
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      test -d $HOME/boost/lib || (wget -nv https://sourceforge.net/projects/boost/files/boost/1.65.1/boost_1_65_1.tar.gz && tar xf boost_1_65_1.tar.gz && cd boost_1_65_1 && ./bootstrap.sh --prefix=$HOME/boost && ./b2 -j$(nproc) install);
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew upgrade boost openssl cmake coreutils || true;
+    fi
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/websocketpp -DBOOST_ROOT=$HOME/boost -DBUILD_TESTS=1 .;
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/websocketpp '-DCMAKE_PREFIX_PATH=/usr/local/opt/boost;/usr/local/opt/openssl' -DBUILD_TESTS=1 .;
+    fi
+  - make -j$(nproc) install
+  - make test
+
 notifications:
-  recipients:
-    - travis@zaphoyd.com
   email:
-    on_success: change
+    on_success: never
     on_failure: always

@@ -92,7 +92,7 @@ macro (link_boost)
 endmacro ()
 
 macro (link_openssl)
-    target_link_libraries (${TARGET_NAME} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+    target_link_libraries (${TARGET_NAME} OpenSSL::SSL OpenSSL::Crypto)
 endmacro ()
 
 macro (link_zlib)
