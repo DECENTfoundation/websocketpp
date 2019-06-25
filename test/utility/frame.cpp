@@ -373,6 +373,7 @@ BOOST_AUTO_TEST_CASE( block_word_mask_inplace ) {
     BOOST_CHECK( std::equal(buffer,buffer+15,masked) );
 }
 
+#if !defined(__clang__)
 BOOST_AUTO_TEST_CASE( continuous_word_mask ) {
     uint8_t input[16];
     uint8_t output[16];
@@ -514,6 +515,7 @@ BOOST_AUTO_TEST_CASE( continuous_byte_mask_inplace ) {
     BOOST_CHECK( std::equal(buffer,buffer+16,masked) );
     BOOST_CHECK_EQUAL( pkey_temp, frame::circshift_prepared_key(pkey,3) );
 }
+#endif
 
 BOOST_AUTO_TEST_CASE( continuous_word_mask2 ) {
     uint8_t buffer[12] = {0xA6, 0x15, 0x97, 0xB9,
