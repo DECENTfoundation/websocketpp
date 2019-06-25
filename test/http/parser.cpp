@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE( extract_attributes_blank ) {
 
     it = websocketpp::http::parser::extract_attributes(s.begin(),s.end(),a);
     BOOST_CHECK( it == s.begin() );
-    BOOST_CHECK_EQUAL( a.size(), 0 );
+    BOOST_CHECK_EQUAL( a.size(), 0u );
 }
 
 BOOST_AUTO_TEST_CASE( extract_attributes_simple ) {

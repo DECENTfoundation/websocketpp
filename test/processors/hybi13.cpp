@@ -225,20 +225,18 @@ BOOST_AUTO_TEST_CASE( frame_empty_binary_unmasked ) {
     // all in one chunk
     processor_setup env1(false);
 
-    size_t ret1 = env1.p.consume(frame,2,env1.ec);
-
-    BOOST_CHECK_EQUAL( ret1, 2 );
+    BOOST_CHECK_EQUAL( env1.p.consume(frame,2,env1.ec), 2u );
     BOOST_CHECK( !env1.ec );
     BOOST_CHECK_EQUAL( env1.p.ready(), true );
 
     // two separate chunks
     processor_setup env2(false);
 
-    BOOST_CHECK_EQUAL( env2.p.consume(frame,1,env2.ec), 1 );
+    BOOST_CHECK_EQUAL( env2.p.consume(frame,1,env2.ec), 1u );
     BOOST_CHECK( !env2.ec );
     BOOST_CHECK_EQUAL( env2.p.ready(), false );
 
-    BOOST_CHECK_EQUAL( env2.p.consume(frame+1,1,env2.ec), 1 );
+    BOOST_CHECK_EQUAL( env2.p.consume(frame+1,1,env2.ec), 1u );
     BOOST_CHECK( !env2.ec );
     BOOST_CHECK_EQUAL( env2.p.ready(), true );
 }
@@ -249,7 +247,7 @@ BOOST_AUTO_TEST_CASE( frame_small_binary_unmasked ) {
     uint8_t frame[4] = {0x82, 0x02, 0x2A, 0x2A};
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env.p.consume(frame,4,env.ec), 4 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame,4,env.ec), 4u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
 
@@ -271,7 +269,7 @@ BOOST_AUTO_TEST_CASE( frame_extended_binary_unmasked ) {
     std::fill_n(frame+4,126,0x2A);
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env.p.consume(frame,130,env.ec), 130 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame,130,env.ec), 130u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
 
@@ -288,7 +286,7 @@ BOOST_AUTO_TEST_CASE( frame_jumbo_binary_unmasked ) {
     std::fill_n(frame+4,126,0x2A);
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env.p.consume(frame,130,env.ec), 130 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame,130,env.ec), 130u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
 
@@ -305,7 +303,7 @@ BOOST_AUTO_TEST_CASE( control_frame_too_large ) {
     std::fill_n(frame+4,126,0x2A);
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_GT( env.p.consume(frame,130,env.ec), 0 );
+    BOOST_CHECK_GT( env.p.consume(frame,130,env.ec), 0u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::control_too_big  );
     BOOST_CHECK_EQUAL( env.p.ready(), false );
 }
@@ -319,7 +317,7 @@ BOOST_AUTO_TEST_CASE( rsv_bits_used ) {
         processor_setup env(false);
 
         BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-        BOOST_CHECK_GT( env.p.consume(frame[i],2,env.ec), 0 );
+        BOOST_CHECK_GT( env.p.consume(frame[i],2,env.ec), 0u );
         BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::invalid_rsv_bit  );
         BOOST_CHECK_EQUAL( env.p.ready(), false );
     }
@@ -342,7 +340,7 @@ BOOST_AUTO_TEST_CASE( reserved_opcode_used ) {
         processor_setup env(false);
 
         BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-        BOOST_CHECK_GT( env.p.consume(frame[i],2,env.ec), 0 );
+        BOOST_CHECK_GT( env.p.consume(frame[i],2,env.ec), 0u );
         BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::invalid_opcode  );
         BOOST_CHECK_EQUAL( env.p.ready(), false );
     }
@@ -354,7 +352,7 @@ BOOST_AUTO_TEST_CASE( fragmented_control_message ) {
     uint8_t frame[2] = {0x08, 0x00};
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_GT( env.p.consume(frame,2,env.ec), 0 );
+    BOOST_CHECK_GT( env.p.consume(frame,2,env.ec), 0u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::fragmented_control );
     BOOST_CHECK_EQUAL( env.p.ready(), false );
 }
@@ -368,42 +366,42 @@ BOOST_AUTO_TEST_CASE( fragmented_binary_message ) {
 
     // read fragmented message in one chunk
     BOOST_CHECK_EQUAL( env0.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env0.p.consume(frame0,6,env0.ec), 6 );
+    BOOST_CHECK_EQUAL( env0.p.consume(frame0,6,env0.ec), 6u );
     BOOST_CHECK( !env0.ec );
     BOOST_CHECK_EQUAL( env0.p.ready(), true );
     BOOST_CHECK_EQUAL( env0.p.get_message()->get_payload(), "**" );
 
     // read fragmented message in two chunks
     BOOST_CHECK_EQUAL( env0.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env0.p.consume(frame0,3,env0.ec), 3 );
+    BOOST_CHECK_EQUAL( env0.p.consume(frame0,3,env0.ec), 3u );
     BOOST_CHECK( !env0.ec );
     BOOST_CHECK_EQUAL( env0.p.ready(), false );
-    BOOST_CHECK_EQUAL( env0.p.consume(frame0+3,3,env0.ec), 3 );
+    BOOST_CHECK_EQUAL( env0.p.consume(frame0+3,3,env0.ec), 3u );
     BOOST_CHECK( !env0.ec );
     BOOST_CHECK_EQUAL( env0.p.ready(), true );
     BOOST_CHECK_EQUAL( env0.p.get_message()->get_payload(), "**" );
 
     // read fragmented message with control message in between
     BOOST_CHECK_EQUAL( env0.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env0.p.consume(frame1,8,env0.ec), 5 );
+    BOOST_CHECK_EQUAL( env0.p.consume(frame1,8,env0.ec), 5u );
     BOOST_CHECK( !env0.ec );
     BOOST_CHECK_EQUAL( env0.p.ready(), true );
     BOOST_CHECK_EQUAL( env0.p.get_message()->get_opcode(), websocketpp::frame::opcode::PING);
-    BOOST_CHECK_EQUAL( env0.p.consume(frame1+5,3,env0.ec), 3 );
+    BOOST_CHECK_EQUAL( env0.p.consume(frame1+5,3,env0.ec), 3u );
     BOOST_CHECK( !env0.ec );
     BOOST_CHECK_EQUAL( env0.p.ready(), true );
     BOOST_CHECK_EQUAL( env0.p.get_message()->get_payload(), "**" );
 
     // read lone continuation frame
     BOOST_CHECK_EQUAL( env0.p.get_message(), message_ptr() );
-    BOOST_CHECK_GT( env0.p.consume(frame0+3,3,env0.ec), 0);
+    BOOST_CHECK_GT( env0.p.consume(frame0+3,3,env0.ec), 0u );
     BOOST_CHECK_EQUAL( env0.ec, websocketpp::processor::error::invalid_continuation );
 
     // read two start frames in a row
     BOOST_CHECK_EQUAL( env1.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env1.p.consume(frame0,3,env1.ec), 3);
+    BOOST_CHECK_EQUAL( env1.p.consume(frame0,3,env1.ec), 3u );
     BOOST_CHECK( !env1.ec );
-    BOOST_CHECK_GT( env1.p.consume(frame0,3,env1.ec), 0);
+    BOOST_CHECK_GT( env1.p.consume(frame0,3,env1.ec), 0u );
     BOOST_CHECK_EQUAL( env1.ec, websocketpp::processor::error::invalid_continuation );
 }
 
@@ -413,7 +411,7 @@ BOOST_AUTO_TEST_CASE( unmasked_client_frame ) {
     uint8_t frame[2] = {0x82, 0x00};
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_GT( env.p.consume(frame,2,env.ec), 0 );
+    BOOST_CHECK_GT( env.p.consume(frame,2,env.ec), 0u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::masking_required );
     BOOST_CHECK_EQUAL( env.p.ready(), false );
 }
@@ -424,7 +422,7 @@ BOOST_AUTO_TEST_CASE( masked_server_frame ) {
     uint8_t frame[8] = {0x82, 0x82, 0xFF, 0xFF, 0xFF, 0xFF, 0xD5, 0xD5};
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_GT( env.p.consume(frame,8,env.ec), 0 );
+    BOOST_CHECK_GT( env.p.consume(frame,8,env.ec), 0u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::masking_forbidden );
     BOOST_CHECK_EQUAL( env.p.ready(), false );
 }
@@ -435,7 +433,7 @@ BOOST_AUTO_TEST_CASE( frame_small_binary_masked ) {
     uint8_t frame[8] = {0x82, 0x82, 0xFF, 0xFF, 0xFF, 0xFF, 0xD5, 0xD5};
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env.p.consume(frame,8,env.ec), 8 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame,8,env.ec), 8u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
     BOOST_CHECK_EQUAL( env.p.get_message()->get_payload(), "**" );
@@ -449,7 +447,7 @@ BOOST_AUTO_TEST_CASE( masked_fragmented_binary_message ) {
 
     // read fragmented message in one chunk
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( env.p.consume(frame0,14,env.ec), 14 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame0,14,env.ec), 14u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
     BOOST_CHECK_EQUAL( env.p.get_message()->get_payload(), "**" );
@@ -499,7 +497,7 @@ BOOST_AUTO_TEST_CASE( single_frame_message_too_large ) {
     uint8_t frame0[10] = {0x82, 0x84, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01};
 
     // read message that is one byte too large
-    BOOST_CHECK_EQUAL( env.p.consume(frame0,10,env.ec), 6 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame0,10,env.ec), 6u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::message_too_big );
 }
 
@@ -512,11 +510,11 @@ BOOST_AUTO_TEST_CASE( multiple_frame_message_too_large ) {
     uint8_t frame1[9] = {0x80, 0x83, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01};
 
     // read first message frame with size under the limit
-    BOOST_CHECK_EQUAL( env.p.consume(frame0,8,env.ec), 8 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame0,8,env.ec), 8u );
     BOOST_CHECK( !env.ec );
     
     // read second message frame that puts the size over the limit
-    BOOST_CHECK_EQUAL( env.p.consume(frame1,9,env.ec), 6 );
+    BOOST_CHECK_EQUAL( env.p.consume(frame1,9,env.ec), 6u );
     BOOST_CHECK_EQUAL( env.ec, websocketpp::processor::error::message_too_big );
 }
 
@@ -690,4 +688,3 @@ BOOST_AUTO_TEST_CASE( extension_negotiation_permessage_deflate ) {
     BOOST_CHECK( !neg_results.first );
     BOOST_CHECK_EQUAL( neg_results.second, "permessage-deflate" );
 }
-

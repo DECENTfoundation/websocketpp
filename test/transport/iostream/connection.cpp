@@ -487,16 +487,16 @@ BOOST_AUTO_TEST_CASE( async_read_at_least_read_some ) {
     BOOST_CHECK_EQUAL( con->ec, make_error_code(websocketpp::error::test) );
 
     char input[10] = "abcdefg";
-    BOOST_CHECK_EQUAL(con->read_some(input,5), 5);
+    BOOST_CHECK_EQUAL(con->read_some(input,5), 5u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "abcdexxxxx" );
 
-    BOOST_CHECK_EQUAL(con->read_some(input+5,2), 0);
+    BOOST_CHECK_EQUAL(con->read_some(input+5,2), 0u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "abcdexxxxx" );
 
     con->async_read_at_least(1,buf+5,5);
-    BOOST_CHECK_EQUAL(con->read_some(input+5,2), 2);
+    BOOST_CHECK_EQUAL(con->read_some(input+5,2), 2u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "abcdefgxxx" );
 }
@@ -513,14 +513,14 @@ BOOST_AUTO_TEST_CASE( async_read_at_least_read_some_indef ) {
     // here we expect to return early from read some because the outstanding
     // read was for 5 bytes and we were called with 10.
     char input[11] = "aaaaabbbbb";
-    BOOST_CHECK_EQUAL(con->read_some(input,10), 5);
+    BOOST_CHECK_EQUAL(con->read_some(input,10), 5u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "aaaaaxxxxx" );
     BOOST_CHECK_EQUAL( con->indef_read_total, 5 );
 
     // A subsequent read should read 5 more because the indef read refreshes
     // itself. The new read will start again at the beginning of the buffer.
-    BOOST_CHECK_EQUAL(con->read_some(input+5,5), 5);
+    BOOST_CHECK_EQUAL(con->read_some(input+5,5), 5u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "bbbbbxxxxx" );
     BOOST_CHECK_EQUAL( con->indef_read_total, 10 );
@@ -606,4 +606,3 @@ BOOST_AUTO_TEST_CASE( shared_pointer_memory_cleanup ) {
     BOOST_CHECK_EQUAL( con->ec, make_error_code(websocketpp::transport::error::eof) );
     BOOST_CHECK_EQUAL(con.use_count(), 1);
 }
-

@@ -595,12 +595,12 @@ BOOST_AUTO_TEST_CASE( pause_reading ) {
     // complete the frame so another read will be requested. This one wont actually happen
     // because the connection is paused now.
     con->pause_reading();
-    BOOST_CHECK_EQUAL( con->read_some(buffer, 1), 1);
-    BOOST_CHECK_EQUAL( con->read_some(buffer+1, 1), 0);
+    BOOST_CHECK_EQUAL( con->read_some(buffer, 1), 1u);
+    BOOST_CHECK_EQUAL( con->read_some(buffer+1, 1), 0u);
     // resume reading and try again. Should work this time because the resume should have
     // re-queued a read.
     con->resume_reading();
-    BOOST_CHECK_EQUAL( con->read_some(buffer+1, 1), 1);
+    BOOST_CHECK_EQUAL( con->read_some(buffer+1, 1), 1u);
 }
 
 

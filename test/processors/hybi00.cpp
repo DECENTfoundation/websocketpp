@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE( extract_subprotocols ) {
     std::vector<std::string> subps;
 
     BOOST_CHECK( !env.p.extract_subprotocols(env.req,subps) );
-    BOOST_CHECK_EQUAL( subps.size(), 0 );
+    BOOST_CHECK_EQUAL( subps.size(), 0u );
 }
 
 BOOST_AUTO_TEST_CASE( prepare_data_frame_null ) {
