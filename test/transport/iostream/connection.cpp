@@ -516,14 +516,14 @@ BOOST_AUTO_TEST_CASE( async_read_at_least_read_some_indef ) {
     BOOST_CHECK_EQUAL(con->read_some(input,10), 5u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "aaaaaxxxxx" );
-    BOOST_CHECK_EQUAL( con->indef_read_total, 5 );
+    BOOST_CHECK_EQUAL( con->indef_read_total, 5u );
 
     // A subsequent read should read 5 more because the indef read refreshes
     // itself. The new read will start again at the beginning of the buffer.
     BOOST_CHECK_EQUAL(con->read_some(input+5,5), 5u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "bbbbbxxxxx" );
-    BOOST_CHECK_EQUAL( con->indef_read_total, 10 );
+    BOOST_CHECK_EQUAL( con->indef_read_total, 10u );
 }
 
 BOOST_AUTO_TEST_CASE( async_read_at_least_read_all ) {
@@ -536,10 +536,10 @@ BOOST_AUTO_TEST_CASE( async_read_at_least_read_all ) {
     BOOST_CHECK_EQUAL( con->ec, make_error_code(websocketpp::error::test) );
 
     char input[11] = "aaaaabbbbb";
-    BOOST_CHECK_EQUAL(con->read_all(input,10), 10);
+    BOOST_CHECK_EQUAL(con->read_all(input,10), 10u);
     BOOST_CHECK( !con->ec );
     BOOST_CHECK_EQUAL( std::string(buf,10), "bbbbbxxxxx" );
-    BOOST_CHECK_EQUAL( con->indef_read_total, 10 );
+    BOOST_CHECK_EQUAL( con->indef_read_total, 10u );
 }
 
 BOOST_AUTO_TEST_CASE( eof_flag ) {

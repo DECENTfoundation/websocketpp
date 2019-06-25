@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE( empty_consume ) {
 
     size_t ret = env.p.consume(frame,0,env.ec);
 
-    BOOST_CHECK_EQUAL( ret, 0);
+    BOOST_CHECK_EQUAL( ret, 0u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), false );
 }
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE( empty_frame ) {
 
     size_t ret = env.p.consume(frame,2,env.ec);
 
-    BOOST_CHECK_EQUAL( ret, 2);
+    BOOST_CHECK_EQUAL( ret, 2u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
     BOOST_CHECK_EQUAL( env.p.get_message()->get_payload(), "" );
@@ -266,7 +266,7 @@ BOOST_AUTO_TEST_CASE( short_frame ) {
 
     size_t ret = env.p.consume(frame,5,env.ec);
 
-    BOOST_CHECK_EQUAL( ret, 5);
+    BOOST_CHECK_EQUAL( ret, 5u );
     BOOST_CHECK( !env.ec );
     BOOST_CHECK_EQUAL( env.p.ready(), true );
     BOOST_CHECK_EQUAL( env.p.get_message()->get_payload(), "foo" );

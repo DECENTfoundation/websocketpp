@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE( frame_extended_binary_unmasked ) {
     message_ptr foo = env.p.get_message();
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( foo->get_payload().size(), 126 );
+    BOOST_CHECK_EQUAL( foo->get_payload().size(), 126u );
 }
 
 BOOST_AUTO_TEST_CASE( frame_jumbo_binary_unmasked ) {
@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_CASE( frame_jumbo_binary_unmasked ) {
     message_ptr foo = env.p.get_message();
 
     BOOST_CHECK_EQUAL( env.p.get_message(), message_ptr() );
-    BOOST_CHECK_EQUAL( foo->get_payload().size(), 126 );
+    BOOST_CHECK_EQUAL( foo->get_payload().size(), 126u );
 }
 
 BOOST_AUTO_TEST_CASE( control_frame_too_large ) {
@@ -640,7 +640,7 @@ BOOST_AUTO_TEST_CASE( extract_subprotocols_empty ) {
     std::vector<std::string> subps;
 
     BOOST_CHECK( !env.p.extract_subprotocols(env.req,subps) );
-    BOOST_CHECK_EQUAL( subps.size(), 0 );
+    BOOST_CHECK_EQUAL( subps.size(), 0u );
 }
 
 BOOST_AUTO_TEST_CASE( extract_subprotocols_one ) {
@@ -650,7 +650,7 @@ BOOST_AUTO_TEST_CASE( extract_subprotocols_one ) {
     env.req.replace_header("Sec-WebSocket-Protocol","foo");
 
     BOOST_CHECK( !env.p.extract_subprotocols(env.req,subps) );
-    BOOST_REQUIRE_EQUAL( subps.size(), 1 );
+    BOOST_REQUIRE_EQUAL( subps.size(), 1u );
     BOOST_CHECK_EQUAL( subps[0], "foo" );
 }
 
@@ -661,7 +661,7 @@ BOOST_AUTO_TEST_CASE( extract_subprotocols_multiple ) {
     env.req.replace_header("Sec-WebSocket-Protocol","foo,bar");
 
     BOOST_CHECK( !env.p.extract_subprotocols(env.req,subps) );
-    BOOST_REQUIRE_EQUAL( subps.size(), 2 );
+    BOOST_REQUIRE_EQUAL( subps.size(), 2u );
     BOOST_CHECK_EQUAL( subps[0], "foo" );
     BOOST_CHECK_EQUAL( subps[1], "bar" );
 }
@@ -673,7 +673,7 @@ BOOST_AUTO_TEST_CASE( extract_subprotocols_invalid) {
     env.req.replace_header("Sec-WebSocket-Protocol","foo,bar,,,,");
 
     BOOST_CHECK_EQUAL( env.p.extract_subprotocols(env.req,subps), websocketpp::processor::error::make_error_code(websocketpp::processor::error::subprotocol_parse_error) );
-    BOOST_CHECK_EQUAL( subps.size(), 0 );
+    BOOST_CHECK_EQUAL( subps.size(), 0u );
 }
 
 BOOST_AUTO_TEST_CASE( extension_negotiation_permessage_deflate ) {
@@ -686,5 +686,5 @@ BOOST_AUTO_TEST_CASE( extension_negotiation_permessage_deflate ) {
     neg_results = env.p.negotiate_extensions(env.req);
 
     BOOST_CHECK( !neg_results.first );
-    BOOST_CHECK_EQUAL( neg_results.second, "permessage-deflate" );
+    BOOST_CHECK_EQUAL( neg_results.second, "" );
 }

@@ -203,7 +203,7 @@ BOOST_AUTO_TEST_CASE( extract_attributes_simple ) {
 
     it = websocketpp::http::parser::extract_attributes(s.begin(),s.end(),a);
     BOOST_CHECK( it == s.end() );
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("foo") != a.end() );
     BOOST_CHECK_EQUAL( a.find("foo")->second, "" );
 }
@@ -237,63 +237,63 @@ BOOST_AUTO_TEST_CASE( extract_parameters ) {
     p.clear();
     it = extract_parameters(s2.begin(),s2.end(),p);
     BOOST_CHECK( it == s2.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
-    BOOST_CHECK_EQUAL( p[0].second.size(), 0 );
+    BOOST_CHECK_EQUAL( p[0].second.size(), 0u );
 
     p.clear();
     it = extract_parameters(s3.begin(),s3.end(),p);
     BOOST_CHECK( it == s3.begin()+5 );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
-    BOOST_CHECK_EQUAL( p[0].second.size(), 0 );
+    BOOST_CHECK_EQUAL( p[0].second.size(), 0u );
 
     p.clear();
     it = extract_parameters(s4.begin(),s4.end(),p);
     BOOST_CHECK( it == s4.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
-    BOOST_CHECK_EQUAL( p[0].second.size(), 0 );
+    BOOST_CHECK_EQUAL( p[0].second.size(), 0u );
 
     p.clear();
     it = extract_parameters(s5.begin(),s5.end(),p);
     BOOST_CHECK( it == s5.end() );
-    BOOST_CHECK_EQUAL( p.size(), 2 );
+    BOOST_CHECK_EQUAL( p.size(), 2u );
     BOOST_CHECK( p[0].first == "foo" );
-    BOOST_CHECK_EQUAL( p[0].second.size(), 0 );
+    BOOST_CHECK_EQUAL( p[0].second.size(), 0u );
     BOOST_CHECK( p[1].first == "bar" );
-    BOOST_CHECK_EQUAL( p[1].second.size(), 0 );
+    BOOST_CHECK_EQUAL( p[1].second.size(), 0u );
 
     p.clear();
     it = extract_parameters(s6.begin(),s6.end(),p);
     BOOST_CHECK( it == s6.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "" );
 
     p.clear();
     it = extract_parameters(s7.begin(),s7.end(),p);
     BOOST_CHECK( it == s7.end() );
-    BOOST_CHECK_EQUAL( p.size(), 2 );
+    BOOST_CHECK_EQUAL( p.size(), 2u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("baz") != a.end() );
     BOOST_CHECK_EQUAL( a.find("baz")->second, "" );
     BOOST_CHECK( p[1].first == "bar" );
     a = p[1].second;
-    BOOST_CHECK_EQUAL( a.size(), 0 );
+    BOOST_CHECK_EQUAL( a.size(), 0u );
 
     p.clear();
     it = extract_parameters(s8.begin(),s8.end(),p);
     BOOST_CHECK( it == s8.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 2 );
+    BOOST_CHECK_EQUAL( a.size(), 2u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "" );
     BOOST_CHECK( a.find("baz") != a.end() );
@@ -302,20 +302,20 @@ BOOST_AUTO_TEST_CASE( extract_parameters ) {
     p.clear();
     it = extract_parameters(s9.begin(),s9.end(),p);
     BOOST_CHECK( it == s9.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "baz" );
 
     p.clear();
     it = extract_parameters(s10.begin(),s10.end(),p);
     BOOST_CHECK( it == s10.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 2 );
+    BOOST_CHECK_EQUAL( a.size(), 2u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "baz" );
     BOOST_CHECK( a.find("boo") != a.end() );
@@ -324,34 +324,34 @@ BOOST_AUTO_TEST_CASE( extract_parameters ) {
     p.clear();
     it = extract_parameters(s11.begin(),s11.end(),p);
     BOOST_CHECK( it == s11.end() );
-    BOOST_CHECK_EQUAL( p.size(), 2 );
+    BOOST_CHECK_EQUAL( p.size(), 2u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 2 );
+    BOOST_CHECK_EQUAL( a.size(), 2u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "baz" );
     BOOST_CHECK( a.find("boo") != a.end() );
     BOOST_CHECK_EQUAL( a.find("boo")->second, "" );
     a = p[1].second;
-    BOOST_CHECK_EQUAL( a.size(), 0 );
+    BOOST_CHECK_EQUAL( a.size(), 0u );
 
     p.clear();
     it = extract_parameters(s12.begin(),s12.end(),p);
     BOOST_CHECK( it == s12.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "a b c" );
 
     p.clear();
     it = extract_parameters(s13.begin(),s13.end(),p);
     BOOST_CHECK( it == s13.end() );
-    BOOST_CHECK_EQUAL( p.size(), 1 );
+    BOOST_CHECK_EQUAL( p.size(), 1u );
     BOOST_CHECK( p[0].first == "foo" );
     a = p[0].second;
-    BOOST_CHECK_EQUAL( a.size(), 1 );
+    BOOST_CHECK_EQUAL( a.size(), 1u );
     BOOST_CHECK( a.find("bar") != a.end() );
     BOOST_CHECK_EQUAL( a.find("bar")->second, "a \"b\" c" );
 }
@@ -498,7 +498,7 @@ BOOST_AUTO_TEST_CASE( basic_request_with_body ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 65 );
+    BOOST_CHECK_EQUAL( pos, 65u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -526,7 +526,7 @@ BOOST_AUTO_TEST_CASE( basic_request_with_body_split ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 66 );
+    BOOST_CHECK_EQUAL( pos, 66u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -553,7 +553,7 @@ BOOST_AUTO_TEST_CASE( trailing_body_characters ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK( pos == 41 );
+    BOOST_CHECK( pos == 41u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK( r.get_version() == "HTTP/1.1" );
     BOOST_CHECK( r.get_method() == "GET" );
@@ -577,7 +577,7 @@ BOOST_AUTO_TEST_CASE( trailing_body_characters_beyond_max_lenth ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK( pos == 41 );
+    BOOST_CHECK( pos == 41u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK( r.get_version() == "HTTP/1.1" );
     BOOST_CHECK( r.get_method() == "GET" );
@@ -603,7 +603,7 @@ BOOST_AUTO_TEST_CASE( basic_split1 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK( pos == 41 );
+    BOOST_CHECK( pos == 41u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK( r.get_version() == "HTTP/1.1" );
     BOOST_CHECK( r.get_method() == "GET" );
@@ -629,7 +629,7 @@ BOOST_AUTO_TEST_CASE( basic_split2 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK( pos == 41 );
+    BOOST_CHECK( pos == 41u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK( r.get_version() == "HTTP/1.1" );
     BOOST_CHECK( r.get_method() == "GET" );
@@ -695,7 +695,7 @@ BOOST_AUTO_TEST_CASE( max_body_len ) {
         BOOST_CHECK_EQUAL(e.m_error_code,websocketpp::http::status_code::request_entity_too_large);
     }
 
-    BOOST_CHECK_EQUAL(r.get_max_body_size(),5);
+    BOOST_CHECK_EQUAL(r.get_max_body_size(),5u);
     BOOST_CHECK( exception == true );
 }
 
@@ -714,7 +714,7 @@ BOOST_AUTO_TEST_CASE( firefox_full_request ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK( pos == 482 );
+    BOOST_CHECK( pos == 482u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK( r.get_version() == "HTTP/1.1" );
     BOOST_CHECK( r.get_method() == "GET" );
@@ -780,7 +780,7 @@ BOOST_AUTO_TEST_CASE( old_http_version ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 41 );
+    BOOST_CHECK_EQUAL( pos, 41u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.0" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -803,7 +803,7 @@ BOOST_AUTO_TEST_CASE( new_http_version1 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 42 );
+    BOOST_CHECK_EQUAL( pos, 42u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.12" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -826,7 +826,7 @@ BOOST_AUTO_TEST_CASE( new_http_version2 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 43 );
+    BOOST_CHECK_EQUAL( pos, 43u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/12.12" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -868,7 +868,7 @@ BOOST_AUTO_TEST_CASE( header_whitespace1 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 43 );
+    BOOST_CHECK_EQUAL( pos, 43u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -891,7 +891,7 @@ BOOST_AUTO_TEST_CASE( header_whitespace2 ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 40 );
+    BOOST_CHECK_EQUAL( pos, 40u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -914,7 +914,7 @@ BOOST_AUTO_TEST_CASE( header_aggregation ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 61 );
+    BOOST_CHECK_EQUAL( pos, 61u );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_method(), "GET" );
@@ -938,7 +938,7 @@ BOOST_AUTO_TEST_CASE( wikipedia_example_response ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 159 );
+    BOOST_CHECK_EQUAL( pos, 159u );
     BOOST_CHECK( r.headers_ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_status_code(), websocketpp::http::status_code::switching_protocols );
@@ -966,7 +966,7 @@ BOOST_AUTO_TEST_CASE( wikipedia_example_response_trailing ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 159 );
+    BOOST_CHECK_EQUAL( pos, 159u );
     BOOST_CHECK( r.headers_ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_status_code(), websocketpp::http::status_code::switching_protocols );
@@ -994,7 +994,7 @@ BOOST_AUTO_TEST_CASE( wikipedia_example_response_trailing_large ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 159 );
+    BOOST_CHECK_EQUAL( pos, 159u );
     BOOST_CHECK( r.headers_ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_status_code(), websocketpp::http::status_code::switching_protocols );
@@ -1021,7 +1021,7 @@ BOOST_AUTO_TEST_CASE( response_with_non_standard_lws ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 158 );
+    BOOST_CHECK_EQUAL( pos, 158u );
     BOOST_CHECK( r.headers_ready() );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
     BOOST_CHECK_EQUAL( r.get_status_code(), websocketpp::http::status_code::switching_protocols );
@@ -1048,7 +1048,7 @@ BOOST_AUTO_TEST_CASE( plain_http_response ) {
     }
 
     BOOST_CHECK( exception == false );
-    BOOST_CHECK_EQUAL( pos, 405 );
+    BOOST_CHECK_EQUAL( pos, 405u );
     BOOST_CHECK( r.headers_ready() == true );
     BOOST_CHECK( r.ready() == true );
     BOOST_CHECK_EQUAL( r.get_version(), "HTTP/1.1" );
@@ -1083,7 +1083,7 @@ BOOST_AUTO_TEST_CASE( parse_istream ) {
     }
 
     BOOST_CHECK_EQUAL( exception, false );
-    BOOST_CHECK_EQUAL( pos, 405 );
+    BOOST_CHECK_EQUAL( pos, 405u );
     BOOST_CHECK_EQUAL( r.headers_ready(), true );
     BOOST_CHECK_EQUAL( r.ready(), true );
 }
